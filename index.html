@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savings Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Savings Calculator</h1>
+
+    <label>
+        <input type="radio" name="calculatorType" value="goal" checked onclick="toggleCalculator()">
+        Savings Goal Calculator
+    </label>
+
+    <label>
+        <input type="radio" name="calculatorType" value="accumulation" onclick="toggleCalculator()">
+        Accumulated Savings Calculator
+    </label>
+
+    <div id="savingsGoalCalculator">
+        <label for="goalAmount">Enter your savings goal:</label>
+        <input type="number" id="goalAmount" placeholder="Enter amount" required>
+        <br>
+        <button onclick="calculateSavingsGoal()">Calculate</button>
+        <div id="goalResults"></div>
+    </div>
+
+    <div id="accumulatedSavingsCalculator" class="hidden">
+        <label for="yearsToSave">Enter the number of years:</label>
+        <input type="number" id="yearsToSave" placeholder="Number of years" required>
+        <br>
+        <label for="biWeeklyAmount">Enter the amount saved every two weeks:</label>
+        <input type="number" id="biWeeklyAmount" placeholder="Bi-weekly saving amount" required>
+        <br>
+        <button onclick="calculateTotalSavings()">Calculate</button>
+        <div id="savingsResults"></div>
+    </div>
+</div>
+
+<script>
+    function toggleCalculator() {
+        var goalCalculator = document.getElementById('savingsGoalCalculator');
+        var accumulationCalculator = document.getElementById('accumulatedSavingsCalculator');
+        var selectedValue = document.querySelector('input[name="calculatorType"]:checked').value;
+
+        if (selectedValue === "goal") {
+            goalCalculator.style.display = 'block';
+            accumulationCalculator.style.display = 'none';
+        } else {
+            goalCalculator.style.display = 'none';
+            accumulationCalculator.style.display = 'block';
+        }
+    }
+
+    function calculateSavingsGoal() {
+        var goalAmount = document.getElementById('goalAmount').value;
+        var goalResults = document.getElementById('goalResults');
+
+        if (goalAmount) {
+            goalAmount = parseFloat(goalAmount);
+            var daily = (goalAmount / 365).toFixed(2);
+            var weekly = (goalAmount / 52).toFixed(2);
+            var biWeekly = (goalAmount / 26).toFixed(2);
+            var monthly = (goalAmount / 12).toFixed(2);
+
+            goalResults.innerHTML = '<p>Daily: $' + daily + '</p>' +
+                '<p>Weekly: $' + weekly + '</p>' +
+                '<p>Bi-Weekly: $' + biWeekly + '</p>' +
+                '<p>Monthly: $' + monthly + '</p>';
+        } else {
+            goalResults.innerHTML = '<p>Please enter a valid savings goal.</p>';
+        }
+    }
+
+    function calculateTotalSavings() {
+        var years = document.getElementById('yearsToSave').value;
+        var biWeeklyAmount = document.getElementById('biWeeklyAmount').value;
+        var savingsResults = document.getElementById('savingsResults');
+
+        if (years && biWeeklyAmount) {
+            years = parseFloat(years);
+            biWeeklyAmount = parseFloat(biWeeklyAmount);
+            var totalSavings = biWeeklyAmount * (26 * years); // 26 bi-weekly periods in a year
+
+            savingsResults.innerHTML = '<p>Total Accumulated Savings: $' + totalSavings.toFixed(2) + '</p>';
+        } else {
+            savingsResults.innerHTML = '<p>Please enter valid values for both fields.</p>';
+        }
+    }
+</script>
+</body>
+</html>
